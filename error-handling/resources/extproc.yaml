@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ext-proc-grpc
+spec:
+  selector:
+    matchLabels:
+      app: ext-proc-grpc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ext-proc-grpc
+    spec:
+      containers:
+        - name: ext-proc-grpc
+          image: duncandoyle/ext-proc-error-handling:0.1.0
+          # imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 18080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ext-proc-grpc
+  labels:
+    app: ext-proc-grpc
+  annotations:
+    gloo.solo.io/h2_service: "true"
+spec:
+  ports:
+  - port: 4444
+    targetPort: 18080
+    protocol: TCP
+  selector:
+    app: ext-proc-grpc
