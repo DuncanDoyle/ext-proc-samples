@@ -206,6 +206,8 @@ func (s *server) Process(srv service_ext_proc_v3.ExternalProcessor_ProcessServer
 					RemoveHeaders: []string{"content-length", "x-envoy-upstream-service-time"},
 				},
 				BodyMutation: bodyMutation,
+				//ddoyle: setting this status to replace the response body.
+				Status: service_ext_proc_v3.CommonResponse_CONTINUE_AND_REPLACE,
 			}
 
 			//Set the HeadersResponse on the processing response.
@@ -220,7 +222,7 @@ func (s *server) Process(srv service_ext_proc_v3.ExternalProcessor_ProcessServer
 		//Seems this is not called when the upstream response does not have a body.
 		case *service_ext_proc_v3.ProcessingRequest_ResponseBody:
 			log.Printf("Got ResponseBody (not currently handled)")
-
+			/*
 			b := req.Request.(*service_ext_proc_v3.ProcessingRequest_ResponseBody)
 			log.Printf("ResponseBody.Body: %s", string(b.ResponseBody.Body))
 			log.Printf("ResponseBody.EndOfStream: %T", b.ResponseBody.EndOfStream)
@@ -243,6 +245,7 @@ func (s *server) Process(srv service_ext_proc_v3.ExternalProcessor_ProcessServer
 					}
 				}
 			}
+			*/
 
 		//------------------------- Response Trailers -------------------------
 
